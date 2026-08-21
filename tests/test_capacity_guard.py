@@ -3,10 +3,11 @@ from unittest.mock import patch
 from fastapi.testclient import TestClient
 
 from orchestrator.main import app
-from config import API_TOKEN
 
 
 def test_returns_503_when_no_workers_available():
+    from config import API_TOKEN
+
     client = TestClient(app)
     with patch("orchestrator.main.scheduler") as mock_scheduler:
         mock_scheduler.can_accept_task.return_value = False
@@ -22,6 +23,8 @@ def test_returns_503_when_no_workers_available():
 
 
 def test_capacity_check_exception_fails_safe_to_503():
+    from config import API_TOKEN
+
     client = TestClient(app)
     with patch("orchestrator.main.scheduler") as mock_scheduler:
         mock_scheduler.can_accept_task.side_effect = RuntimeError("redis down")
